@@ -7,9 +7,14 @@ public class PlayerAttacks : MonoBehaviour
     [SerializeField] private GameObject attackArea;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private GameObject rotateObject;
-    [SerializeField] public bool attacking=false;
+    [SerializeField] public bool attacking = false;
     [SerializeField] public bool shooting = false;
     [SerializeField] private Animator anim;
+    [SerializeField] private GameObject line;
+
+    private Vector3[] pos;
+    public float meleeDamage;
+    public float shootDamage;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +53,10 @@ public class PlayerAttacks : MonoBehaviour
     //Rutina de ataque melee
     IEnumerator MeleeAttack()
     {
+        attackArea.GetComponent<AttackHitbox>().dmg = meleeDamage;
         attacking = true;
         attackArea.SetActive(true);
+
         yield return new WaitForSeconds(0.5f);
         attackArea.SetActive(false);
         attacking = false;
@@ -59,20 +66,28 @@ public class PlayerAttacks : MonoBehaviour
     //rutina de ataque disparo
     IEnumerator ShootAttack(Vector2 dir)
     {
+        var app = attackPoint.position;
+        line.SetActive(true);
+        pos[0] = app;
+        pos[1] = new Vector2(app.x, app.y) + 20 * dir;
         anim.SetTrigger("Shooting");
+        yield return new WaitForSeconds(0.1f);
+
+        line.GetComponent<LineRenderer>().SetPositions(pos);
         shooting = true;
-        RaycastHit2D hit = Physics2D.Raycast(attackPoint.position,dir);
-        Debug.DrawLine(attackPoint.position,new Vector2(attackPoint.position.x,attackPoint.position.y)+10*dir, Color.white, 5f);
+        RaycastHit2D hit = Physics2D.Raycast(app,dir*20);
+        Debug.DrawLine(attackPoint.position,pos[1], Color.white, 5f) ;
         if (hit.collider != null)
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                //Cosas cuando el rayo le pega
+                hit.collider.GetComponent<Enemy>().UpdateHealth(shootDamage);
             }
         }
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.3f);
 
         shooting = false;
+        line.SetActive(false);
     }
 
 

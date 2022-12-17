@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class AttackHitbox : MonoBehaviour
 {
+
+    public float dmg;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null)
         {
             if (collision.CompareTag("Enemy"))
             {
-                //Hacer cosas de daño a los enemigos
+                collision.GetComponent<Enemy>().UpdateHealth(dmg);
             }
         }
     }
