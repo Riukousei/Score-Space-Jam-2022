@@ -9,6 +9,7 @@ public class PlayerAttacks : MonoBehaviour
     [SerializeField] private GameObject rotateObject;
     [SerializeField] public bool attacking=false;
     [SerializeField] public bool shooting = false;
+    [SerializeField] private Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +59,7 @@ public class PlayerAttacks : MonoBehaviour
     //rutina de ataque disparo
     IEnumerator ShootAttack(Vector2 dir)
     {
+        anim.SetTrigger("Shooting");
         shooting = true;
         RaycastHit2D hit = Physics2D.Raycast(attackPoint.position,dir);
         Debug.DrawLine(attackPoint.position,new Vector2(attackPoint.position.x,attackPoint.position.y)+10*dir, Color.white, 5f);
@@ -68,7 +70,7 @@ public class PlayerAttacks : MonoBehaviour
                 //Cosas cuando el rayo le pega
             }
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
 
         shooting = false;
     }
