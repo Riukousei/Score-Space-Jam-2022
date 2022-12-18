@@ -6,6 +6,7 @@ public class AttackHitbox : MonoBehaviour
 {
 
     public float dmg;
+    public PlayerAttacks PA;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null)

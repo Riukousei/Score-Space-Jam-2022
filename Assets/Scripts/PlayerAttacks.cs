@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerAttacks : MonoBehaviour
 {
@@ -15,10 +16,17 @@ public class PlayerAttacks : MonoBehaviour
     private Vector3[] pos;
     public float meleeDamage;
     public float shootDamage;
+
+    public int maxBullets = 4;
+    public int actualBullets = 4;
+    public TextMeshProUGUI ActualBullets;
+    public TextMeshProUGUI MaxBullets;
     // Start is called before the first frame update
     void Start()
     {
         pos = new Vector3[2];
+        ActualBullets.text = actualBullets.ToString();
+        MaxBullets.text = "/" + maxBullets. ToString();
     }
 
     // Update is called once per frame
@@ -44,8 +52,9 @@ public class PlayerAttacks : MonoBehaviour
         {
             StartCoroutine(MeleeAttack());
         }
-        if (Input.GetMouseButtonDown(1) && attacking == false && shooting == false)
+        if (Input.GetMouseButtonDown(1) && attacking == false && shooting == false && actualBullets>0)
         {
+            usedAmmo();
             StartCoroutine(ShootAttack(dir));
         }
     }
@@ -67,7 +76,6 @@ public class PlayerAttacks : MonoBehaviour
     IEnumerator ShootAttack(Vector2 dir)
     {
 
-       
         anim.SetTrigger("Shooting");
         yield return new WaitForSeconds(0.1f);
         var app = attackPoint.position;
@@ -102,6 +110,24 @@ public class PlayerAttacks : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         shooting = false;
+    }
+    public void extraAmmo()
+    {
+        actualBullets = actualBullets + 1;
+        ActualBullets.text = actualBullets.ToString();
+        if (actualBullets > maxBullets)
+        {
+            actualBullets = maxBullets;
+        }
+    }
+    public void usedAmmo()
+    {
+        actualBullets = actualBullets - 1;
+        ActualBullets.text = actualBullets.ToString();
+        if (actualBullets < 0)
+        {
+            actualBullets = 0;
+        }
     }
 
 
