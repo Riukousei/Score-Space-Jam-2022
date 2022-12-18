@@ -18,7 +18,7 @@ public class PlayerAttacks : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        pos = new Vector3[2];
     }
 
     // Update is called once per frame
@@ -57,7 +57,7 @@ public class PlayerAttacks : MonoBehaviour
         attacking = true;
         attackArea.SetActive(true);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         attackArea.SetActive(false);
         attacking = false;
     }
@@ -66,28 +66,42 @@ public class PlayerAttacks : MonoBehaviour
     //rutina de ataque disparo
     IEnumerator ShootAttack(Vector2 dir)
     {
-        var app = attackPoint.position;
-        line.SetActive(true);
-        pos[0] = app;
-        pos[1] = new Vector2(app.x, app.y) + 20 * dir;
+
+       
         anim.SetTrigger("Shooting");
         yield return new WaitForSeconds(0.1f);
+        var app = attackPoint.position;
+        pos[0] = app;
+        pos[1] = new Vector2(app.x, app.y) + 200 * dir;
 
-        line.GetComponent<LineRenderer>().SetPositions(pos);
         shooting = true;
         RaycastHit2D hit = Physics2D.Raycast(app,dir*20);
         Debug.DrawLine(attackPoint.position,pos[1], Color.white, 5f) ;
         if (hit.collider != null)
         {
+            line.SetActive(true);
+
             if (hit.collider.CompareTag("Enemy"))
             {
+                pos[1] = hit.collider.transform.position;
                 hit.collider.GetComponent<Enemy>().UpdateHealth(shootDamage);
+                Debug.Log(hit);
             }
         }
+        else
+        {
+            line.SetActive(true);
+
+            
+        }
+        line.GetComponent<LineRenderer>().SetPositions(pos);
+        yield return new WaitForSeconds(0.1f);
+
+        line.SetActive(false);
+
         yield return new WaitForSeconds(0.3f);
 
         shooting = false;
-        line.SetActive(false);
     }
 
 

@@ -75,7 +75,7 @@ public class EnemySpawner : MonoBehaviour
             Probabilidades();
             yield return new WaitForEndOfFrame();
         }
-        n1=(n1+ ((Mathf.RoundToInt(Time.time) + 1) / 20));
+        n1=(n1+ ((Mathf.RoundToInt(Time.time) + 1) / 14));
         yield return new WaitForSeconds(20);
         StartCoroutine(spawneador());
     }
