@@ -29,6 +29,11 @@ public class PlayerAttacks : MonoBehaviour
         MaxBullets.text = "/" + maxBullets. ToString();
     }
 
+    public void updateMaxBulletCount()
+    {
+        MaxBullets.text = "/" + maxBullets.ToString();
+    }
+
     // Update is called once per frame
     void Update()
     {

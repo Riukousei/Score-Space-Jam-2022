@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public float health;
+    public float maxHealth;
     [Header("Se mide en ")]
     public float regenSpeed;
 
